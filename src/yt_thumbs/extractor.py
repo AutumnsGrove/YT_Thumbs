@@ -91,3 +91,56 @@ def download_thumbnail(video_id: str, output_path: str) -> bool:
         return True
     except (urllib.error.HTTPError, urllib.error.URLError, OSError):
         return False
+
+
+def get_video_metadata(video_id: str) -> dict:
+    """Fetch video metadata from YouTube.
+
+    Extracts the title and description from a YouTube video page by parsing
+    the HTML meta tags. Makes a single HTTP request to the video page.
+
+    Args:
+        video_id: The YouTube video ID
+
+    Returns:
+        A dictionary containing:
+        - 'title': The video title (empty string if not found)
+        - 'description': The video description (empty string if not found)
+        - 'thumbnail_url': The maxresdefault thumbnail URL
+
+    Example:
+        >>> metadata = get_video_metadata('dQw4w9WgXcQ')
+        >>> print(metadata['title'])
+        'Rick Astley - Never Gonna Give You Up (Official Video)'
+    """
+    url = f"https://www.youtube.com/watch?v={video_id}"
+    metadata = {
+        "title": "",
+        "description": "",
+        "thumbnail_url": get_thumbnail_url(video_id),
+    }
+
+    try:
+        # Fetch the video page HTML
+        with urllib.request.urlopen(url, timeout=10) as response:
+            html = response.read().decode("utf-8")
+
+        # Extract title from <meta property="og:title" content="...">
+        title_match = re.search(
+            r'<meta\s+property="og:title"\s+content="([^"]*)"', html
+        )
+        if title_match:
+            metadata["title"] = title_match.group(1)
+
+        # Extract description from <meta property="og:description" content="...">
+        desc_match = re.search(
+            r'<meta\s+property="og:description"\s+content="([^"]*)"', html
+        )
+        if desc_match:
+            metadata["description"] = desc_match.group(1)
+
+    except (urllib.error.HTTPError, urllib.error.URLError, OSError) as e:
+        # Return empty strings for title and description on error
+        pass
+
+    return metadata

@@ -103,6 +103,31 @@ options:
                         Output filename (default: {video_id}.jpg)
 ```
 
+## Batch Mode
+
+Process multiple URLs and get a markdown table with video metadata:
+
+```bash
+# Create a file with URLs (one per line)
+cat > urls.txt <<EOF
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+https://youtu.be/wiTbtugbhgw
+EOF
+
+# Process all URLs and output markdown table
+yt-thumb --batch urls.txt
+
+# Or save to a file
+yt-thumb --batch urls.txt --output results.md
+```
+
+Output format:
+```markdown
+| Thumbnail URL | Video Name | Video Description |
+|---------------|------------|-------------------|
+| https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg | Rick Astley - Never Gonna Give You Up | The official video for "Never Gonna Give You Up"... |
+```
+
 ## Examples
 
 ### Piping URL to clipboard (macOS)
