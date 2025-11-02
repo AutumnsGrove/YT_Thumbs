@@ -12,7 +12,7 @@ from .extractor import (
 )
 
 
-def process_batch_urls(batch_file: str, output_file: str = None) -> None:
+def process_batch_urls(batch_file: str, output_file: str | None = None) -> None:
     """Process multiple URLs from a file and output as markdown table.
 
     Args:

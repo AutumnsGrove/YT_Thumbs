@@ -92,7 +92,7 @@ def download_thumbnail(video_id: str, output_path: str) -> bool:
         return False
 
 
-def get_video_metadata(video_id: str) -> dict:
+def get_video_metadata(video_id: str) -> dict[str, str]:
     """Fetch video metadata from YouTube.
 
     Extracts the title and description from a YouTube video page by parsing
