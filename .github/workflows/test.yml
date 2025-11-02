@@ -62,7 +62,7 @@ jobs:
           # 3. Add it to GitHub: Settings → Secrets → Actions → New repository secret
           # 4. Name: CODECOV_TOKEN, Value: your-token-here
           # 5. Uncomment the line below:
-          # token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   quality:
     name: Code Quality

@@ -67,7 +67,7 @@ jobs:
           # 2. Add it to GitHub: Settings → Secrets → Actions → New repository secret
           # 3. Name: PYPI_API_TOKEN, Value: pypi-AgEIcHlwaS5vcmc...
           # 4. Uncomment the lines below:
-          # password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.PYPI_API_TOKEN }}
           # Or use trusted publishing (recommended, no token needed):
           # https://docs.pypi.org/trusted-publishers/
           skip-existing: true
