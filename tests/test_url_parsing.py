@@ -3,7 +3,9 @@ Comprehensive tests for YouTube URL parsing and video ID extraction.
 
 Tests all supported URL formats, edge cases, and invalid inputs.
 """
+
 import pytest
+
 from yt_thumbs.extractor import extract_video_id
 
 

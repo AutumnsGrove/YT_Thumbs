@@ -5,12 +5,11 @@ generate thumbnail URLs, and download thumbnails.
 """
 
 import re
-import urllib.request
 import urllib.error
-from typing import Optional
+import urllib.request
 
 
-def extract_video_id(url: str) -> Optional[str]:
+def extract_video_id(url: str) -> str | None:
     """Extract video ID from a YouTube URL.
 
     Supports the following URL formats:
@@ -126,20 +125,16 @@ def get_video_metadata(video_id: str) -> dict:
             html = response.read().decode("utf-8")
 
         # Extract title from <meta property="og:title" content="...">
-        title_match = re.search(
-            r'<meta\s+property="og:title"\s+content="([^"]*)"', html
-        )
+        title_match = re.search(r'<meta\s+property="og:title"\s+content="([^"]*)"', html)
         if title_match:
             metadata["title"] = title_match.group(1)
 
         # Extract description from <meta property="og:description" content="...">
-        desc_match = re.search(
-            r'<meta\s+property="og:description"\s+content="([^"]*)"', html
-        )
+        desc_match = re.search(r'<meta\s+property="og:description"\s+content="([^"]*)"', html)
         if desc_match:
             metadata["description"] = desc_match.group(1)
 
-    except (urllib.error.HTTPError, urllib.error.URLError, OSError) as e:
+    except (urllib.error.HTTPError, urllib.error.URLError, OSError):
         # Return empty strings for title and description on error
         pass
 

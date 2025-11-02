@@ -1,10 +1,11 @@
 """
 Pytest fixtures for YT_Thumbs tests
 """
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, MagicMock
+
+from unittest.mock import MagicMock
 from urllib.error import HTTPError, URLError
+
+import pytest
 
 
 @pytest.fixture
@@ -64,13 +65,7 @@ def mock_successful_response():
 @pytest.fixture
 def mock_404_response():
     """Mock a 404 HTTP error"""
-    return HTTPError(
-        url="https://example.com",
-        code=404,
-        msg="Not Found",
-        hdrs={},
-        fp=None
-    )
+    return HTTPError(url="https://example.com", code=404, msg="Not Found", hdrs={}, fp=None)
 
 
 @pytest.fixture

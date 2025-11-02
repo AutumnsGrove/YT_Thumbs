@@ -4,13 +4,12 @@ Comprehensive tests for CLI functionality.
 Tests command-line interface including argument parsing, batch processing,
 and output handling.
 """
-import pytest
-import sys
-from unittest.mock import Mock, MagicMock, patch, call
-from pathlib import Path
-from io import StringIO
 
-from yt_thumbs.cli import process_batch_urls, main
+from unittest.mock import patch
+
+import pytest
+
+from yt_thumbs.cli import main, process_batch_urls
 
 
 class TestProcessBatchUrls:
@@ -209,7 +208,9 @@ class TestMainCLI:
     @patch("yt_thumbs.cli.download_thumbnail")
     @patch("yt_thumbs.cli.extract_video_id")
     @patch("sys.argv", ["yt-thumb", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "--download"])
-    def test_download_mode_default_filename(self, mock_extract, mock_download, temp_dir, monkeypatch, capsys):
+    def test_download_mode_default_filename(
+        self, mock_extract, mock_download, temp_dir, monkeypatch, capsys
+    ):
         """Test download mode with default filename"""
         monkeypatch.chdir(temp_dir)  # Change to temp dir for output
         mock_extract.return_value = "dQw4w9WgXcQ"
@@ -223,8 +224,13 @@ class TestMainCLI:
 
     @patch("yt_thumbs.cli.download_thumbnail")
     @patch("yt_thumbs.cli.extract_video_id")
-    @patch("sys.argv", ["yt-thumb", "https://youtu.be/test123", "--download", "--output", "my_thumb.jpg"])
-    def test_download_mode_custom_filename(self, mock_extract, mock_download, temp_dir, monkeypatch, capsys):
+    @patch(
+        "sys.argv",
+        ["yt-thumb", "https://youtu.be/test123", "--download", "--output", "my_thumb.jpg"],
+    )
+    def test_download_mode_custom_filename(
+        self, mock_extract, mock_download, temp_dir, monkeypatch, capsys
+    ):
         """Test download mode with custom output filename"""
         monkeypatch.chdir(temp_dir)
         mock_extract.return_value = "test123"
@@ -251,7 +257,9 @@ class TestMainCLI:
     @patch("yt_thumbs.cli.download_thumbnail")
     @patch("yt_thumbs.cli.extract_video_id")
     @patch("sys.argv", ["yt-thumb", "https://youtu.be/test123", "--download"])
-    def test_download_failure_exits_with_error(self, mock_extract, mock_download, temp_dir, monkeypatch, capsys):
+    def test_download_failure_exits_with_error(
+        self, mock_extract, mock_download, temp_dir, monkeypatch, capsys
+    ):
         """Test that download failure exits with error"""
         monkeypatch.chdir(temp_dir)
         mock_extract.return_value = "test123"
@@ -307,7 +315,9 @@ class TestMainCLI:
     @patch("yt_thumbs.cli.download_thumbnail")
     @patch("yt_thumbs.cli.extract_video_id")
     @patch("sys.argv", ["yt-thumb", "https://youtu.be/test", "-d", "-o", "nested/dir/thumb.jpg"])
-    def test_creates_nested_output_directory(self, mock_extract, mock_download, temp_dir, monkeypatch):
+    def test_creates_nested_output_directory(
+        self, mock_extract, mock_download, temp_dir, monkeypatch
+    ):
         """Test that nested output directories are created"""
         monkeypatch.chdir(temp_dir)
         mock_extract.return_value = "test123"
@@ -329,7 +339,9 @@ class TestMainCLI:
 
     @patch("yt_thumbs.cli.get_thumbnail_url")
     @patch("yt_thumbs.cli.extract_video_id")
-    @patch("sys.argv", ["yt-thumb", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "-o", "output.jpg"])
+    @patch(
+        "sys.argv", ["yt-thumb", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "-o", "output.jpg"]
+    )
     def test_output_without_download_flag(self, mock_extract, mock_get_url, capsys):
         """Test that -o without -d still prints URL (doesn't download)"""
         mock_extract.return_value = "dQw4w9WgXcQ"

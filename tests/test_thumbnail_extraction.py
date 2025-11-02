@@ -3,10 +3,13 @@ Comprehensive tests for thumbnail extraction and download functionality.
 
 Tests thumbnail URL generation, downloading with quality fallback, and metadata extraction.
 """
-import pytest
-from unittest.mock import Mock, MagicMock, patch, mock_open
+
+from unittest.mock import MagicMock, patch
 from urllib.error import HTTPError, URLError
-from yt_thumbs.extractor import get_thumbnail_url, download_thumbnail, get_video_metadata
+
+import pytest
+
+from yt_thumbs.extractor import download_thumbnail, get_thumbnail_url, get_video_metadata
 
 
 class TestGetThumbnailUrl:
@@ -199,8 +202,13 @@ class TestGetVideoMetadata:
         metadata = get_video_metadata(video_id)
 
         assert metadata["title"] == "Rick Astley - Never Gonna Give You Up"
-        assert metadata["description"] == "The official video for Rick Astley's Never Gonna Give You Up"
-        assert metadata["thumbnail_url"] == f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        assert (
+            metadata["description"]
+            == "The official video for Rick Astley's Never Gonna Give You Up"
+        )
+        assert (
+            metadata["thumbnail_url"] == f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        )
 
     @patch("urllib.request.urlopen")
     def test_missing_title(self, mock_urlopen, video_id, mock_video_html_no_title):
@@ -239,7 +247,9 @@ class TestGetVideoMetadata:
 
         assert metadata["title"] == ""
         assert metadata["description"] == ""
-        assert metadata["thumbnail_url"] == f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        assert (
+            metadata["thumbnail_url"] == f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        )
 
     @patch("urllib.request.urlopen")
     def test_http_error_returns_empty_metadata(self, mock_urlopen, video_id):

@@ -5,9 +5,9 @@ import sys
 from pathlib import Path
 
 from .extractor import (
+    download_thumbnail,
     extract_video_id,
     get_thumbnail_url,
-    download_thumbnail,
     get_video_metadata,
 )
 
@@ -21,12 +21,12 @@ def process_batch_urls(batch_file: str, output_file: str = None) -> None:
     """
     # Read URLs from file
     try:
-        with open(batch_file, "r") as f:
+        with open(batch_file) as f:
             urls = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
         print(f"Error: Batch file not found: {batch_file}", file=sys.stderr)
         sys.exit(1)
-    except IOError as e:
+    except OSError as e:
         print(f"Error: Could not read batch file: {e}", file=sys.stderr)
         sys.exit(1)
 
@@ -53,9 +53,7 @@ def process_batch_urls(batch_file: str, output_file: str = None) -> None:
             metadata = get_video_metadata(video_id)
             thumbnail_url = metadata.get("thumbnail_url", "")
             title = metadata.get("title", "").replace("|", "\\|")  # Escape pipes
-            description = metadata.get("description", "").replace(
-                "|", "\\|"
-            )  # Escape pipes
+            description = metadata.get("description", "").replace("|", "\\|")  # Escape pipes
 
             # Truncate description if too long (optional, for readability)
             if len(description) > 100:
@@ -92,7 +90,7 @@ def process_batch_urls(batch_file: str, output_file: str = None) -> None:
                 file=sys.stderr,
             )
             print(f"Processed {processed_count} of {len(urls)} URLs", file=sys.stderr)
-        except IOError as e:
+        except OSError as e:
             print(f"Error: Could not write to output file: {e}", file=sys.stderr)
             sys.exit(1)
     else:
@@ -164,9 +162,7 @@ Examples:
     # Extract video ID from URL
     video_id = extract_video_id(args.url)
     if not video_id:
-        print(
-            f"Error: Could not extract video ID from URL: {args.url}", file=sys.stderr
-        )
+        print(f"Error: Could not extract video ID from URL: {args.url}", file=sys.stderr)
         print("Supported formats:", file=sys.stderr)
         print("  - https://www.youtube.com/watch?v=VIDEO_ID", file=sys.stderr)
         print("  - https://youtu.be/VIDEO_ID", file=sys.stderr)
